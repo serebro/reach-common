@@ -1,0 +1,25 @@
+{
+	"name": "serebro/reach-common",
+	"description": "",
+	"version": "0.9",
+	"keywords": [],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Sergey Ilin",
+			"homepage": "http://github.com/serebro"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "~4.0",
+		"satooshi/php-coveralls": "dev-master"
+	},
+    "autoload": {
+        "psr-0": {
+            "Reach\\": "src"
+        }
+    }
+}
