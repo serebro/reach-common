@@ -1,14 +1,13 @@
 <?php
 
-use Model\Mongo\TestSchema;
-use Reach\EventableTrait;
+use Model\Base as Model;
 
 class EventTest extends PHPUnit_Framework_TestCase
 {
 
     public function testOnOffTrigger()
     {
-        $obj = new TestSchema();
+        $obj = new Model();
 
         $obj->on(
             'testClosure',
@@ -39,7 +38,7 @@ class EventTest extends PHPUnit_Framework_TestCase
 
     public function testException()
     {
-        $obj = new TestSchema();
+        $obj = new Model();
         try {
             $obj->on('test', 123);
         } catch(\Exception $e) {

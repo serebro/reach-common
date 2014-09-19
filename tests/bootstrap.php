@@ -8,7 +8,5 @@ if ( ! file_exists($file = __DIR__.'/../vendor/autoload.php')) {
 
 $loader = require($file);
 $loader->add('Tests', __DIR__);
-$loader->add('Mongo\Benchmarks', __DIR__);
 $loader->add('Model', __DIR__);
 
-include_once('PhactoryTestCase.php');
