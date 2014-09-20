@@ -2,10 +2,12 @@
 
 namespace Reach\Service;
 
+use InvalidArgumentException;
 use Reach\SingletonTrait;
 
 class Container
 {
+
     use SingletonTrait;
 
     protected static $services = [];
@@ -31,10 +33,23 @@ class Container
         return self::$services[$name];
     }
 
-    public static function register($service_name, $config)
+    /**
+     * @param string $service_name
+     * @param array  $config
+     * @param string $class
+     */
+    public static function register($service_name, $config, $class = null)
     {
-        if (!is_string($service_name) && !is_array($config) && !isset($config['class'])) {
-            throw new \InvalidArgumentException('Invalid argument');
+        if (!is_string($service_name) && !is_array($config)) {
+            throw new InvalidArgumentException('Invalid argument');
+        }
+
+        if (!isset($config['class']) && !$class) {
+            throw new InvalidArgumentException('Invalid argument');
+        }
+
+        if ($class) {
+            $config['class'] = $class;
         }
 
         self::$configs[$service_name] = $config;
