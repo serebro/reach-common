@@ -171,15 +171,7 @@ abstract class Model implements IteratorAggregate, ArrayAccess
     {
         $className = get_called_class();
         /** @var Model $model */
-        $model = new $className();
-        if ($model_data) {
-            foreach ($model_data as $attr => $value) {
-                if ($model->hasAttribute($attr)) {
-                    $model->$attr = $value;
-                }
-            }
-        }
-
+        $model = new $className($model_data);
         return $model;
     }
 
