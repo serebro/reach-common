@@ -9,6 +9,6 @@ interface AdapterInterface
 	 * @param string $name
 	 * @return mixed
 	 */
-	public function getInstance($name);
+	public function get($name);
 
 }

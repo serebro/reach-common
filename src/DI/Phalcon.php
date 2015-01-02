@@ -18,7 +18,7 @@ class Phalcon
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	public function getInstance($name)
+	public function get($name)
 	{
 		if ($this->di->has($name)) {
 			return $this->di->get($name);

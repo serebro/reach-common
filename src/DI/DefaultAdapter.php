@@ -22,7 +22,7 @@ class DefaultAdapter implements AdapterInterface
 		return array_key_exists($name, $this->services) || array_key_exists($name, $this->configs);
 	}
 
-	public function getInstance($name)
+	public function get($name)
 	{
 		if (!isset($this->services[$name])) {
 			$this->services[$name] = self::resolve($name);
