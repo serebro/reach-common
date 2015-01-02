@@ -51,10 +51,10 @@ class Container
 	public static function get($name)
 	{
 		if (!self::$di instanceof DefaultAdapter) {
-			throw new \Exception();
+			throw new \Exception('It is not Default Adapter');
 		}
 
-		return self::$di->getInstance($name);
+		return self::$di->get($name);
 	}
 
 	public static function has($name)
@@ -76,7 +76,7 @@ class Container
 		}
 
 		if (!self::$di instanceof DefaultAdapter) {
-			throw new \Exception();
+			throw new \Exception('It is not Default Adapter');
 		}
 
 		self::$di->register($service_name, $config, $class);
