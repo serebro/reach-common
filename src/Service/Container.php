@@ -3,63 +3,83 @@
 namespace Reach\Service;
 
 use InvalidArgumentException;
+use Reach\DI\AdapterInterface;
+use Reach\DI\DefaultAdapter;
 use Reach\SingletonTrait;
 
 class Container
 {
 
-    use SingletonTrait;
+	use SingletonTrait;
 
-    protected static $services = [];
+	/** @var  AdapterInterface */
+	private static $di;
 
-    protected static $configs = [];
 
-    public static function set($name, $service)
-    {
-        self::$services[$name] = $service;
-    }
+	/**
+	 * @return AdapterInterface
+	 */
+	public static function getDI()
+	{
+		return self::$di;
+	}
 
-    public static function has($name)
-    {
-        return array_key_exists($name, self::$services) || array_key_exists($name, self::$configs);
-    }
+	/**
+	 * @param AdapterInterface $di
+	 */
+	public static function setDI(AdapterInterface $di)
+	{
+		self::$di = $di;
+	}
 
-    public static function get($name)
-    {
-        if (!isset(self::$services[$name])) {
-            self::$services[$name] = self::resolve($name);
-        }
+	/**
+	 * @deprecated
+	 * @param $name
+	 * @param $service
+	 */
+	public static function set($name, $service)
+	{
+		self::$di->set($name, $service);
+	}
 
-        return self::$services[$name];
-    }
+	/**
+	 * @deprecated
+	 * @param $name
+	 * @return mixed
+	 * @throws \Exception
+	 */
+	public static function get($name)
+	{
+		if (!self::$di instanceof DefaultAdapter) {
+			throw new \Exception();
+		}
 
-    /**
-     * @param string $service_name
-     * @param array  $config
-     * @param string $class
-     */
-    public static function register($service_name, $config, $class = null)
-    {
-        if (!is_string($service_name) && !is_array($config)) {
-            throw new InvalidArgumentException('Invalid argument');
-        }
+		return self::$di->getInstance($name);
+	}
 
-        if (!isset($config['class']) && !$class) {
-            throw new InvalidArgumentException('Invalid argument');
-        }
+	public static function has($name)
+	{
+		return self::$di->has($name);
+	}
 
-        if ($class) {
-            $config['class'] = $class;
-        }
+	/**
+	 * @deprecated
+	 * @param string $service_name
+	 * @param array  $config
+	 * @param string $class
+	 * @throws \Exception
+	 */
+	public static function register($service_name, $config, $class = null)
+	{
+		if (!self::$di) {
+			self::setDI(new DefaultAdapter());
+		}
 
-        self::$configs[$service_name] = $config;
-    }
+		if (!self::$di instanceof DefaultAdapter) {
+			throw new \Exception();
+		}
 
-    public static function resolve($name)
-    {
-        $config = self::$configs[$name];
-        $class = $config['class'];
-        unset($config['class']);
-        return new $class($config);
-    }
+		self::$di->register($service_name, $config, $class);
+	}
+
 }
