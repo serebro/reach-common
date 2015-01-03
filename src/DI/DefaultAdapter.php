@@ -67,7 +67,7 @@ class DefaultAdapter implements AdapterInterface
         }
 
         $class = $config['class'];
-        if (!class_exists($class, false)) {
+        if (!class_exists($class)) {
             throw new Exception("The class \"$class\" is not found");
         }
 
