@@ -2,6 +2,7 @@
 
 namespace Reach\DI;
 
+use Exception;
 use InvalidArgumentException;
 
 class DefaultAdapter implements AdapterInterface
@@ -55,8 +56,21 @@ class DefaultAdapter implements AdapterInterface
 
 	protected function resolve($name)
 	{
-		$config = $this->configs[$name];
-		$class = $config['class'];
+        if (empty($this->configs[$name])) {
+            throw new Exception("Configuration for \"$name\" is not defined");
+        }
+
+        $config = $this->configs[$name];
+
+        if (empty($config['class'])) {
+            throw new Exception("The parameter \"class\" is not defined");
+        }
+
+        $class = $config['class'];
+        if (!class_exists($class, false)) {
+            throw new Exception("The class \"$class\" is not found");
+        }
+
 		unset($config['class']);
 		return new $class($config);
 	}
