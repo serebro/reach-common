@@ -12,7 +12,6 @@ class Container
 
 	use SingletonTrait;
 
-	/** @var  AdapterInterface */
 	private static $di;
 
 
@@ -27,7 +26,7 @@ class Container
 	/**
 	 * @param AdapterInterface $di
 	 */
-	public static function setDI(AdapterInterface $di)
+	public static function setDI($di)
 	{
 		self::$di = $di;
 	}
