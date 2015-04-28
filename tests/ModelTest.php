@@ -90,64 +90,31 @@ class ModelTest extends PHPUnit_Framework_TestCase
     public function testAddError()
     {
         $model = new Base();
-        $model->addError('error_msg', 'title');
-        $this->assertEquals(['title' => ['error_msg']], PHPUnit_Framework_Assert::readAttribute($model, '_errors'));
+        $model->addError('error');
+        $this->assertEquals(['error'], PHPUnit_Framework_Assert::readAttribute($model, '_errors'));
     }
 
     public function testAddErrors()
     {
         $model = new Base();
-        $model->addErrors(['code1' => 'msg', 'code2' => ['msg1', 'msg2']]);
-        $expected = ['code1' => ['msg'], 'code2' => ['msg1', 'msg2']];
+        $expected = [['error1'], ['error2']];
+        $model->addErrors($expected);
         $this->assertEquals($expected, PHPUnit_Framework_Assert::readAttribute($model, '_errors'));
-    }
-
-    public function testHasError()
-    {
-        $model = new Base();
-        $this->assertFalse($model->hasErrors());
-        $this->assertFalse($model->hasErrors('title'));
-
-        $model->addErrors(['title' => 'error_msg', 'object' => ['err1', 'err2']]);
-        $this->assertTrue($model->hasErrors());
-        $this->assertTrue($model->hasErrors('title'));
-        $this->assertTrue($model->hasErrors('object'));
-        $this->assertFalse($model->hasErrors('created'));
-    }
-
-    public function testGetError()
-    {
-        $model = new Base();
-        $model->addErrors(['title' => 'error_msg', 'object' => ['err1', 'err2']]);
-        $this->assertEquals('error_msg', $model->getError('title'));
-        $this->assertEquals('err1', $model->getError('object'));
-        $this->assertNull($model->getError('not_exists_property'));
     }
 
     public function testGetErrors()
     {
         $model = new Base();
-        $model->addErrors(['title' => 'error_msg', 'object' => ['err1', 'err2']]);
-        $expected = ['title' => ['error_msg'], 'object' => ['err1', 'err2']];
-
-        $this->assertEquals($expected, $model->getErrors());
-        $this->assertEquals($expected['object'], $model->getErrors('object'));
-        $this->assertEquals([], $model->getErrors('not_exists_property'));
+        $expected = [['error1'], ['error2']];
+        $model->addErrors($expected);
+        $this->assertEquals($expected, $model->getErrors('object'));
     }
 
     public function testClearErrors()
     {
         $model = new Base();
-        $model->addErrors(['title' => 'error_msg', 'object' => ['err1', 'err2']]);
-        $expected = ['title' => ['error_msg'], 'object' => ['err1', 'err2']];
-
-        $model->clearErrors('not_exists_property');
-        $this->assertEquals($expected, PHPUnit_Framework_Assert::readAttribute($model, '_errors'));
-
-        $expected = ['object' => ['err1', 'err2']];
-        $model->clearErrors('title');
-        $this->assertEquals($expected, PHPUnit_Framework_Assert::readAttribute($model, '_errors'));
-
+        $expected = [['error1'], ['error2']];
+        $model->addErrors($expected);
         $model->clearErrors();
         $this->assertEquals([], PHPUnit_Framework_Assert::readAttribute($model, '_errors'));
     }
