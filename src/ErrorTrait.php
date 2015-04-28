@@ -8,9 +8,14 @@ trait ErrorTrait
     private $_errors = [];
 
 
-    public function addError($message, $code = 0)
+    /**
+     * @param mixed $message
+     * @return $this
+     */
+    public function addError($message)
     {
-        $this->_errors[$code][] = $message;
+        $this->_errors[] = $message;
+        return $this;
     }
 
     /**
@@ -18,47 +23,31 @@ trait ErrorTrait
      */
     public function addErrors($errors)
     {
-        foreach ($errors as $code => $message) {
-            if (is_array($message)) {
-                foreach ($message as $msg) {
-                    $this->_errors[$code][] = $msg;
-                }
-            } else {
-                $this->_errors[$code][] = $message;
-            }
-        }
+        $this->_errors = $errors;
     }
 
+    /**
+     * @param $code
+     * @return bool
+     */
     public function hasErrors($code = null)
     {
-        if ($code === null) {
-            return $this->_errors !== [];
-        } else {
-            return isset($this->_errors[$code]);
-        }
+        return false;
     }
 
     public function getError($code)
     {
-        return isset($this->_errors[$code]) ? reset($this->_errors[$code]) : null;
+        return null;
     }
 
-    public function getErrors($code = null)
+    public function getErrors()
     {
-        if ($code === null) {
-            return $this->_errors;
-        } else {
-            return isset($this->_errors[$code]) ? $this->_errors[$code] : [];
-        }
+        return $this->_errors;
     }
 
-    public function clearErrors($code = null)
+    public function clearErrors()
     {
-        if ($code === null) {
-            $this->_errors = [];
-        } else if (isset($this->_errors[$code])) {
-            unset($this->_errors[$code]);
-        }
+        $this->_errors = [];
     }
 
 }
