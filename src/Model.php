@@ -104,7 +104,7 @@ abstract class Model implements IteratorAggregate, ArrayAccess
 
     public function init()
     {
-        $this->trigger('init');
+        $this->trigger('init', new Event($this));
     }
 
     public function beforeConstruct($attributes)
