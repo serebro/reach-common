@@ -22,31 +22,39 @@ trait BehaviorTrait
         if ($this->_behaviors === null) {
             $this->_behaviors = [];
             foreach ($this->behaviors() as $name => $behavior) {
-                $this->_attachBehavior($name, $behavior);
+                $this->attachBehavior($name, $behavior);
             }
         }
+
+        return $this;
     }
 
-    private function _attachBehavior($name, $behavior)
+    /**
+     * @param string $name
+     * @param array $behavior_options
+     * @return object
+     * @throws \Exception
+     */
+    public function attachBehavior($name, $behavior_options)
     {
-        if (!($behavior instanceof Behavior)) {
-            if (empty($behavior['behaviorName'])) {
-                $behavior['behavior_name'] = $name;
+        if (!($behavior_options instanceof Behavior)) {
+            if (empty($behavior_options['behaviorName'])) {
+                $behavior_options['behavior_name'] = $name;
             }
-            $behavior = self::createObject($behavior);
+            $behavior_options = self::createObject($behavior_options);
         }
 
         if (is_int($name)) {
-            $behavior->attach($this);
-            $this->_behaviors[] = $behavior;
+            $behavior_options->attach($this);
+            $this->_behaviors[] = $behavior_options;
         } else {
             if (isset($this->_behaviors[$name])) {
                 $this->_behaviors[$name]->detach();
             }
-            $behavior->attach($this);
-            $this->_behaviors[$name] = $behavior;
+            $behavior_options->attach($this);
+            $this->_behaviors[$name] = $behavior_options;
         }
 
-        return $behavior;
+        return $this;
     }
 }
