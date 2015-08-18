@@ -229,7 +229,7 @@ abstract class Model implements IteratorAggregate, ArrayAccess
 
     public function __set($name, $value)
     {
-        return $this->setAttribute($name, $value);
+        $this->setAttribute($name, $value);
     }
 
     /**

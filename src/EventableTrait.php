@@ -33,9 +33,11 @@ trait EventableTrait
      */
     public function trigger($name, $args = null)
     {
-        if (!is_array($args)) {
+        if (isset($args) && !is_array($args)) {
             $args = [$args];
         }
+
+        $args[] = $this; // The last element will be current context
 
         if (isset($this->_listeners[$name])) {
             foreach ($this->_listeners[$name] as $callable) {
